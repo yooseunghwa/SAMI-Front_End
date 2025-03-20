@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import './index.css'; // 스타일 파일을 불러옵니다
 
@@ -7,6 +7,8 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const chatContainerRef = useRef(null);
 
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
@@ -70,10 +72,18 @@ function App() {
     });
   };
 
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);  // messages 배열이 변경될 때마다 실행
+
+
   return (
       <div className="App">
         <h1>SAMI</h1>
-        <div className="chat-container">
+        <div className="chat-container" ref={chatContainerRef}>
           {/* 메시지 출력 */}
           {messages.map((message, index) => (
               <div key={index} className={`message ${message.role}`}>
