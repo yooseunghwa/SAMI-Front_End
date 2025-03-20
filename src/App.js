@@ -97,7 +97,7 @@ function App() {
             value={question}
             onChange={handleQuestionChange}
             onKeyDown={handleKeyDown}  // Enter 키 입력 감지
-            placeholder="여기에 질문을 입력하세요..."
+            placeholder="무엇이든 물어보세요"
             rows="3"
         />
         </div>
