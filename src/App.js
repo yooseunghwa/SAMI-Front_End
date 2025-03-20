@@ -56,12 +56,12 @@ function App() {
   };
 
   const formatMessage = (text) => {
-    // URL을 감지하는 정규식
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    // URL을 감지하는 정규식 (괄호 같은 특수문자가 뒤에 붙었을 경우 제외)
+    const urlRegex = /(https?:\/\/[^\s)]+)/g;
 
     return text.split(urlRegex).map((part, index) => {
       // URL이면 <a> 태그로 변환
-      if (part.match(urlRegex)) {
+      if (part.match(/^https?:\/\//)) {
         return (
             <a key={index} href={part} target="_blank" rel="noopener noreferrer" style={{ color: "blue", textDecoration: "underline" }}>
               {part}
@@ -71,6 +71,7 @@ function App() {
       return part;
     });
   };
+
 
 
   useEffect(() => {
