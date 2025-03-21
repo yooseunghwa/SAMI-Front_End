@@ -3,6 +3,9 @@ import axios from 'axios';
 import './index.css'; // 스타일 파일을 불러옵니다
 
 function App() {
+  useEffect(() => {
+    document.title = "상명대학교 챗봇 SAMI";  // 창 제목 설정
+  }, []);
   const [question, setQuestion] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
