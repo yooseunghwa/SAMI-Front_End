@@ -1,5 +1,31 @@
 .App {
-  text-align: center;
+  background-color: #f1f5f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  padding-top: 100px;
+  overflow: hidden;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('./assets/fonts/NotoSansKR-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.App {
+  font-family: 'Pretendard', sans-serif;
+  background-color: #f1f5f9;
+  height: 100vh;
+  padding-top: 100px;
+  overflow: hidden;
 }
 
 .App-logo {
@@ -35,4 +61,94 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.input-wrapper {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-wrapper textarea {
+  flex: 1;
+  resize: none;
+  padding: 1rem;
+  font-size: 16px;
+  border-radius: 10px 0 0 10px;
+  border: 1px solid #ccc;
+  height: 60px;
+  box-sizing: border-box;
+}
+
+textarea::placeholder {
+  font-family: 'Pretendard', sans-serif;
+}
+
+.send-button {
+  padding: 0 1rem;
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+  border-radius: 0 10px 10px 0;
+  height: 60px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.send-button:hover {
+  background-color: #0056b3;
+}
+
+.chat-container {
+  max-width: 610px;
+  height: calc(100vh - 200px);
+  margin: 0 auto;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+  margin-bottom: 12px;
+  line-height: 1.5;
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 15px;
+  display: inline-block;
+  word-break: break-word;
+}
+
+.message.user {
+  background-color: #007bff;
+  color: white;
+  align-self: flex-end;
+  margin-left: auto;
+  text-align: right;
+
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 0;
+}
+
+.message.system {
+  background-color: #f0f0f0;
+  color: black;
+  align-self: flex-start;
+  margin-right: auto;
+  text-align: left;
+
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 0;
 }
