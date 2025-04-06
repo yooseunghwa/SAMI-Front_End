@@ -12,7 +12,8 @@ function App() {
 
   const [question, setQuestion] = useState('');
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
+  const [loadingDots, setLoadingDots] = useState('');
   const [error, setError] = useState('');
   const chatContainerRef = useRef(null);
 
@@ -25,30 +26,41 @@ function App() {
       alert("질문을 입력해주세요.");
       return;
     }
-
+  
     if (loading) return;
-
-    const newMessage = { role: 'user', text: question };
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
-
+  
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const newMessage = { role: 'user', text: question, timestamp: now };
+    const loadingMessage = {
+      role: 'system',
+      text: 'SAMI_LOADING',
+      timestamp: ''
+    };    
+  
+    setMessages((prev) => [...prev, newMessage, loadingMessage]);
     setLoading(true);
     setError('');
     setQuestion('');
     setTimeout(() => setQuestion(''), 0);
-
+  
     try {
       const response = await axios.post('http://localhost:8000/ask', {
         question: question,
       });
       const answer = response.data.answer;
-      const newAnswer = { role: 'system', text: answer };
-      setMessages((prevMessages) => [...prevMessages, newAnswer]);
+      const botNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const newAnswer = { role: 'system', text: answer, timestamp: botNow };
+  
+      // 로딩 메시지를 답변으로 교체
+      setMessages((prev) => [...prev.slice(0, -1), newAnswer]);
     } catch (err) {
       setError('서버와의 통신에 문제가 발생했습니다.');
+      // 로딩 메시지 삭제
+      setMessages((prev) => prev.slice(0, -1));
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && !event.shiftKey && !loading) {
@@ -72,10 +84,22 @@ function App() {
   };
 
   useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    if (!loading) {
+      setLoadingDots('');
+      return;
     }
-  }, [messages]);
+  
+    const interval = setInterval(() => {
+      setLoadingDots((prev) => {
+        if (prev === '') return '.';
+        if (prev === '.') return '..';
+        if (prev === '..') return '...';
+        return '';
+      });
+    }, 500); // 점 바뀌는 간격
+  
+    return () => clearInterval(interval);
+  }, [loading]);  
 
   return (
     <div className="App">
@@ -83,9 +107,19 @@ function App() {
       
       <div className="chat-container" ref={chatContainerRef}>
         {messages.map((message, index) => (
-          <div key={index} className={`message ${message.role}`}>
-            <strong>{message.role === 'user' ? '나' : 'SAMI'}:</strong> {formatMessage(message.text)}
+          <div key={index} className={`message-wrapper ${message.role}`}>
+          <div className={`message ${message.role}${message.text === 'SAMI_LOADING' ? ' loading' : ''}`}>
+            {message.text === 'SAMI_LOADING' ? (
+              <span>{`SAMI가 답변 생성 중입니다${loadingDots}`}</span>
+            ) : (
+              formatMessage(message.text)
+            )}
           </div>
+
+          {message.timestamp && (
+            <div className="timestamp">{message.timestamp}</div>
+          )}
+        </div>        
         ))}
       </div>
 

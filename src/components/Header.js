@@ -15,7 +15,7 @@ const Header = () => {
       <div className="header">
         <div className="header-left">
           <img src={samiLogo} alt="SAMI 로고" className="sami-logo" />
-          <span className="sami-title">상명대학교 챗봇 새미(SAMI)</span>
+          <span className="sami-title">상명대학교 챗봇 사미(SAMI)</span>
         </div>
         <div className="header-right">
           <FaHome className="icon" onClick={() => window.location.reload()} />
